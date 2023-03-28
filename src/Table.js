@@ -8,7 +8,6 @@ const formatMoney = (amount) => {
 };
 const Table = () => {
   const totalCount = useSelector((state) => state.counter);
-  console.log(totalCount, " => Line No: 6");
   let content;
   if (totalCount?.length === 1) {
     content = <h2 className={` border text-center`}>Nothing Was found</h2>;
@@ -17,7 +16,10 @@ const Table = () => {
     const newCount = [...totalCount];
     newCount.splice(0, 1);
     content = newCount.map((i) => (
-      <tr key={i.id} className="bg-gray-200"> 
+      <tr
+        key={i.id}
+        className={`${i.id % 2 === 0 ? "bg-gray-200" : "bg-gray-300 "}`}
+      >
         <td className="border px-4 py-2">{i.year}</td>
         <td className="border px-4 py-2">{formatMoney(i.totalValue)}</td>
         <td className="border px-4 py-2">{formatMoney(i.returnValue)}</td>

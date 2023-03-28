@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+const date = new Date();
+const currentYear = date.getFullYear();
 const initialState = [
   {
     id: 1,
-    year: 2022,
+    year: +currentYear - 1,
     totalValue: 0,
     returnValue: 0,
   },
@@ -42,11 +43,13 @@ export const counterSlice = createSlice({
         initialValue = calTotalValue;
         const item = {
           id: state.length + 1,
-          year: 2022 + i,
+          year: +currentYear + i,
           // m * (1 + r)^12 - m
 
           totalValue: calTotalValue,
-          returnValue: Math.ceil(calTotalValue / 10),
+          returnValue: Math.ceil(
+            (calTotalValue * actions.payload.monthlyGrow) / 100
+          ),
         };
         state.push(item);
       }
