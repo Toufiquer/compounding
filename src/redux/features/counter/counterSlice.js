@@ -3,11 +3,24 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = [
   {
     id: 1,
-    year: 2023,
-    totalValue: 1000,
-    return: 100,
+    year: 2022,
+    totalValue: 0,
+    returnValue: 0,
   },
 ];
+
+const calculateTotalValue = (
+  initialValue = 0,
+  mInvest,
+  mGrow,
+  totalMonth = 12
+) => {
+  let total = initialValue;
+  for (let i = 1; i <= totalMonth; i++) {
+    total += (total * mGrow) / 100 + mInvest;
+  }
+  return Math.ceil(total);
+};
 
 export const counterSlice = createSlice({
   name: "counter",
@@ -15,14 +28,25 @@ export const counterSlice = createSlice({
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     calculate: (state, actions) => {
-      for (let i in actions.payload.year) {
+      if (state.length > 5) {
+        state.length = 0;
+      }
+      let initialValue = 0;
+      for (let i = 1; i <= actions.payload.year; i++) {
+        const calTotalValue = calculateTotalValue(
+          initialValue,
+          +actions.payload.monthlyInvest,
+          +actions.payload.monthlyGrow,
+          12
+        );
+        initialValue = calTotalValue;
         const item = {
           id: state.length + 1,
-          year: +state[i] + 1,
-          totalValue:
-            (actions.payload.monthlyInvest *
-              ((1 + actions.payload.monthlyGrow) ^ 11)) /
-            actions.payload.monthlyGrow,
+          year: 2022 + i,
+          // m * (1 + r)^12 - m
+
+          totalValue: calTotalValue,
+          returnValue: Math.ceil(calTotalValue / 10),
         };
         state.push(item);
       }
